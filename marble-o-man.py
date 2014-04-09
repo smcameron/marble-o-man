@@ -32,9 +32,10 @@ import random
 
 xdim = 800;
 ydim = 400;
+z = 60.0;
+u = 0.95;
 
 ia = Image.new("RGB", (xdim, ydim));
-ib = Image.new("RGB", (xdim, ydim));
 
 draw = ImageDraw.Draw(ia);
 
@@ -55,6 +56,30 @@ def checkerboard(im):
          else:
 	    im.putpixel((x, y), (0, 0, 0));
 
+def vertical_stroke(x, y):
+    return (int(x), int(y + z * math.pow(u, math.fabs(x - (xdim / 2)))));
+
+def clamped_getpixel(i, coord):
+   x = coord[0];
+   y = coord[1];
+   if (x < 0):
+      x = 0;
+   if (x >= xdim):
+      x = xdim - 1;
+   if (y < 0):
+      y = 0;
+   if (y >= ydim):
+      y = ydim - 1;
+   return i.getpixel((x, y));
+
+def marble(im, f):
+   i = Image.new("RGB", (xdim, ydim));
+   for x in range(0, xdim):
+      for y in range(0, ydim):
+         paintpixel(i, (x, y), clamped_getpixel(im, f(x, y))); 
+   return i;
+
 checkerboard(ia);
-ia.save("output.png");
+ib = marble(ia, vertical_stroke);
+ib.save("output.png");
 
