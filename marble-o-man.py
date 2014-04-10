@@ -59,6 +59,9 @@ def checkerboard(im):
 def vertical_stroke(x, y, xl):
     return (int(x), int(y + z * math.pow(u, math.fabs(x - xl))));
 
+def horizontal_stroke(x, y, yl):
+    return (int(x + z * math.pow(u, math.fabs(y - yl))), int(y));
+
 def clamped_getpixel(i, coord):
    x = coord[0];
    y = coord[1];
@@ -83,5 +86,8 @@ checkerboard(ia);
 ib = marble(ia, vertical_stroke, xdim / 2);
 ic = marble(ib, vertical_stroke, xdim / 4);
 ib = marble(ic, vertical_stroke, 3 * xdim / 4);
-ib.save("output.png");
+ic = marble(ib, horizontal_stroke, ydim / 4);
+ib = marble(ic, horizontal_stroke, ydim / 2);
+ic = marble(ib, horizontal_stroke, 3 * ydim / 4);
+ic.save("output.png");
 
