@@ -56,8 +56,8 @@ def checkerboard(im):
          else:
 	    im.putpixel((x, y), (0, 0, 0));
 
-def vertical_stroke(x, y):
-    return (int(x), int(y + z * math.pow(u, math.fabs(x - (xdim / 2)))));
+def vertical_stroke(x, y, xl):
+    return (int(x), int(y + z * math.pow(u, math.fabs(x - xl))));
 
 def clamped_getpixel(i, coord):
    x = coord[0];
@@ -72,14 +72,16 @@ def clamped_getpixel(i, coord):
       y = ydim - 1;
    return i.getpixel((x, y));
 
-def marble(im, f):
+def marble(im, f, xl):
    i = Image.new("RGB", (xdim, ydim));
    for x in range(0, xdim):
       for y in range(0, ydim):
-         paintpixel(i, (x, y), clamped_getpixel(im, f(x, y))); 
+         paintpixel(i, (x, y), clamped_getpixel(im, f(x, y, xl))); 
    return i;
 
 checkerboard(ia);
-ib = marble(ia, vertical_stroke);
+ib = marble(ia, vertical_stroke, xdim / 2);
+ic = marble(ib, vertical_stroke, xdim / 4);
+ib = marble(ic, vertical_stroke, 3 * xdim / 4);
 ib.save("output.png");
 
